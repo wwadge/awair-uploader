@@ -40,9 +40,12 @@ class Authorization {
   isAuthenticated = () => this.keycloak?.authenticated === true;
 
   login = () => {
-    return this.keycloak!.login({ redirectUri: 'http://localhost:33333/keycloak-redirect' });
+    return this.keycloak!.login({ scope: "offline_access", redirectUri: 'http://localhost:33333/keycloak-redirect' });
   };
 
+  refresh = () => {
+    return this.keycloak?.updateToken(-1);
+  };
   logout = () => {
     this.keycloak?.logout({ redirectUri: 'http://localhost:33333/keycloak-redirect' });
   };
@@ -70,6 +73,7 @@ const AuthProvider = (props: AuthorizationProviderProps) => {
       onEvent={async (event) => {
         if (event === 'onAuthSuccess') {
           props.setAuthenticated(true);
+         
         }
         if (event === 'onAuthLogout') {
           props.setAuthenticated(false);
