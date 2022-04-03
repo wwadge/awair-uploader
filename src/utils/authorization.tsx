@@ -50,6 +50,8 @@ class Authorization {
     this.keycloak?.logout({ redirectUri: 'http://localhost:33333/keycloak-redirect' });
   };
 
+  refreshToken = async () => this.keycloak!.updateToken(60);
+
 }
 
 export type AuthorizationProviderProps = {
@@ -73,7 +75,6 @@ const AuthProvider = (props: AuthorizationProviderProps) => {
       onEvent={async (event) => {
         if (event === 'onAuthSuccess') {
           props.setAuthenticated(true);
-         
         }
         if (event === 'onAuthLogout') {
           props.setAuthenticated(false);
